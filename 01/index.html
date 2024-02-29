@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Заглавие</title>
+        <script type="text/javascript">
+            function sum() {
+                const arg1 = parseInt(document.getElementById('arg1').value)
+                const arg2 = parseInt(document.getElementById('arg2').value)
+
+                const resultContainer = document.getElementById('result')
+
+                resultContainer.innerText = arg1 + arg2
+            }
+
+            // TODO: do the same for subtraction, multiplication and division
+            document.addEventListener('DOMContentLoaded', function () {
+                console.log('dom content loaded')
+                const additionButton = document.getElementById('addition')
+                console.log(additionButton)
+                additionButton.addEventListener('click', sum)
+            })
+        </script>
+    </head>
+
+    <body>
+        <h1>Добро утро!</h1>
+
+        <input id="arg1" type="number" />
+        <input id="arg2" type="number" />
+
+        <button id="addition">+</button>
+
+        <div>
+            <p>Резултатът е: <span id="result"></span></p>
+        </div>
+    </body>
+</html>
