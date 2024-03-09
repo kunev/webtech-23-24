@@ -1,38 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Заглавие</title>
-        <script type="text/javascript">
-            function sum() {
-                const arg1 = parseInt(document.getElementById('arg1').value)
-                const arg2 = parseInt(document.getElementById('arg2').value)
+  <head>
+    <meta charset="UTF-8">
+    <title>Заглавие</title>
+    <script type="text/javascript">
+      function performOperation(operation) {
+        const arg1 = parseInt(document.getElementById("arg1").value);
+        const arg2 = parseInt(document.getElementById("arg2").value);
 
-                const resultContainer = document.getElementById('result')
+        const resultContainer = document.getElementById("result");
+        let result;
 
-                resultContainer.innerText = arg1 + arg2
-            }
+        switch (operation) {
+          case "addition":
+            result = arg1 + arg2;
+            break;
+          case "subtraction":
+            result = arg1 - arg2;
+            break;
+          case "multiplication":
+            result = arg1 * arg2;
+            break;
+          case "division":
+            result = arg1 / arg2;
+            break;
+          default:
+            result = "Invalid operation";
+        }
 
-            // TODO: do the same for subtraction, multiplication and division
-            document.addEventListener('DOMContentLoaded', function () {
-                console.log('dom content loaded')
-                const additionButton = document.getElementById('addition')
-                console.log(additionButton)
-                additionButton.addEventListener('click', sum)
-            })
-        </script>
-    </head>
+        resultContainer.innerText = result;
+      }
 
-    <body>
-        <h1>Добро утро!</h1>
+      document.addEventListener("DOMContentLoaded", function () {
+        const additionButton = document.getElementById("addition");
+        additionButton.addEventListener("click", function () {
+          performOperation("addition");
+        });
 
-        <input id="arg1" type="number" />
-        <input id="arg2" type="number" />
+        const subtractButton = document.getElementById("subtraction");
+        subtractButton.addEventListener("click", function () {
+          performOperation("subtraction");
+        });
 
-        <button id="addition">+</button>
+        const multiplyButton = document.getElementById("multiplication");
+        multiplyButton.addEventListener("click", function () {
+          performOperation("multiplication");
+        });
 
-        <div>
-            <p>Резултатът е: <span id="result"></span></p>
-        </div>
-    </body>
+        const divisionButton = document.getElementById("division");
+        divisionButton.addEventListener("click", function () {
+          performOperation("division");
+        });
+      });
+    </script>
+  </head>
+
+  <body>
+    <h1>Добро утро!</h1>
+
+    <input id="arg1" type="number" />
+    <input id="arg2" type="number" />
+
+    <button id="addition">+</button>
+    <button id="subtraction">-</button>
+    <button id="multiplication">*</button>
+    <button id="division">/</button>
+
+    <div>
+      <p>Резултатът е: <span id="result"></span></p>
+    </div>
+  </body>
 </html>

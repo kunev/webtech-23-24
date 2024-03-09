@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('form')
+  const messageText = document.getElementById('message')
 
   form.addEventListener('submit', (event) => {
     event.preventDefault()
 
     const data = Object.fromEntries(new FormData(form).entries())
     data.guess = parseInt(data.guess)
-    console.log(JSON.stringify(data))
 
     fetch('/guess', {
       method: 'POST',
@@ -17,7 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
     })
       .then(response => response.json())
       .then(responseData => {
-
+        if(responseData.correct){
+          messageText.innerHTML = "You guessed the number!!! A new number for guessing is generated!"
+        }
+        else{
+          messageText.innerHTML = `Wrong! The number we are searching for is ${responseData.hint} than ${data.guess}`
+        }
       })
   })
 })
