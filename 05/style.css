@@ -1,0 +1,21 @@
+@property --board-size {
+  syntax: "<number>";
+}
+
+div#wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+div#board {
+  display: grid;
+  grid-template-columns: repeat(var(--board-size), 20px);
+  gap: 2px;
+  background-color: yellowgreen;
+}
+
+span.cell {
+  width: 20px;
+  height: 20px;
+  background-color: bisque;
+}
