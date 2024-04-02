@@ -1,5 +1,4 @@
-function initBoard() {
-  const [columns, rows] = [8, 8];
+function initBoard(columns: number, rows: number) {
   const board: string[][] = [];
   for (let x = 0; x < rows; x++) {
     board.push([]);
@@ -7,7 +6,6 @@ function initBoard() {
       board[x].push("0");
     }
   }
-  console.log(board);
   const numberOfMines = 3;
   let placedMines = 0;
 
@@ -18,6 +16,7 @@ function initBoard() {
     ];
     if (board[x][y] !== "#") {
       board[x][y] = "#";
+      incrementNeigbours(board, x, y);
       placedMines++;
     }
   }
@@ -25,23 +24,49 @@ function initBoard() {
   return { columns, rows, board };
 }
 
+function incrementNeigbours(board: string[][], x: number, y: number): void {
+  [-1, 0, 1].forEach((i) => {
+    [-1, 0, 1].forEach((j) => {
+      if (
+        x + i >= 0 &&
+        x + i < board.length &&
+        y + j >= 0 &&
+        y + j < board[x + i].length &&
+        board[x + i][y + j] != "#"
+      ) {
+        board[x + i][y + j] = (parseInt(board[x + i][y + j]) + 1).toString();
+      }
+    });
+  });
+}
+
+function assert(value: any, msg?: string): asserts value {
+  if (!value) {
+    throw new Error(msg);
+  }
+}
+
+const state: { board: string[][]; columns: number; rows: number } = {} as any;
+
+function updateState(newState: typeof state) {
+  state.board = newState.board;
+  state.columns = newState.columns;
+  state.rows = newState.rows;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  const { columns, rows } = initBoard();
+  updateState(initBoard(8, 8));
 
   const root = document.querySelector<HTMLElement>(":root");
-  if (!root) {
-    throw new Error("could not get root element");
-  }
-  root.style.setProperty("--board-size", columns.toString());
+  assert(root);
+  root.style.setProperty("--board-size", state.columns.toString());
 
   const boardElement = document.querySelector<HTMLDivElement>("#board");
 
-  if (!boardElement) {
-    throw new Error("could not get board element");
-  }
+  assert(boardElement);
 
-  for (let x = 0; x < rows; x++) {
-    for (let y = 0; y < columns; y++) {
+  for (let x = 0; x < state.rows; x++) {
+    for (let y = 0; y < state.columns; y++) {
       const cell = document.createElement("span");
       cell.dataset.x = x.toString();
       cell.dataset.y = y.toString();
@@ -58,7 +83,29 @@ document.addEventListener("DOMContentLoaded", () => {
       event.target.classList.contains("cell")
     ) {
       const cell = event.target;
-      console.log(`click on cell [${cell.dataset.x}, ${cell.dataset.y}]`);
+      assert(cell.dataset.x);
+      assert(cell.dataset.y);
+      cell.innerText =
+        state.board[parseInt(cell.dataset.x)][parseInt(cell.dataset.y)];
     }
+  });
+
+  const columnsInput = document.querySelector("input[name=columns]");
+  const rowsInput = document.querySelector("input[name=rows]");
+
+  columnsInput?.addEventListener("change", (event) => {
+    const input = event.target;
+    assert(input);
+    assert(input instanceof HTMLInputElement);
+
+    updateState(initBoard(parseInt(input.value), state.rows));
+  });
+
+  rowsInput?.addEventListener("change", (event) => {
+    const input = event.target;
+    assert(input);
+    assert(input instanceof HTMLInputElement);
+
+    updateState(initBoard(state.columns, parseInt(input.value)));
   });
 });

@@ -18,4 +18,6 @@ span.cell {
   width: 20px;
   height: 20px;
   background-color: bisque;
+  text-align: center;
+  line-height: 20px;
 }
