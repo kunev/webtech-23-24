@@ -36,7 +36,8 @@ export class Game {
       x: number,
       y: number,
       state: CellState
-    ) => void
+    ) => void,
+    private readonly onGameEnd: (won: boolean) => void
   ) {
     this.cells = []
     this.open = []
@@ -66,7 +67,7 @@ export class Game {
     }
   }
 
-  openCell(x: number, y: number) {
+  openCell(x: number, y: number, skipWinCheck: boolean = false) {
     if (this.open[x][y] || !this.inBoard(x, y) || this.marked[x][y]) {
       return
     }
@@ -75,18 +76,18 @@ export class Game {
     this.emitCellStateChange(x, y)
 
     if (this.cells[x][y] === '*') {
-      this.loseGame([[x, y]])
-    } else if (
-      this.open.filter(row => row.filter(v => v)).length ===
-      this.rows * this.columns
-    ) {
-      this.state = 'won'
+      this.lose([[x, y]])
+      return
     }
 
     if (this.cells[x][y] === '0') {
       this.forEachNeighbour(x, y, (x, y) => {
-        this.openCell(x, y)
+        this.openCell(x, y, true)
       })
+    }
+
+    if (!skipWinCheck && this.hasWon()) {
+      this.onGameEnd(true)
     }
   }
 
@@ -97,6 +98,10 @@ export class Game {
 
     this.marked[x][y] = !this.marked[x][y]
     this.emitCellStateChange(x, y)
+
+    if (this.hasWon()) {
+      this.onGameEnd(true)
+    }
   }
 
   openWhenDiffused(x: number, y: number) {
@@ -117,7 +122,7 @@ export class Game {
 
     const wrongMarks = markedNeighbours.filter(({v}) => v != '*')
     if (wrongMarks.length > 0) {
-      this.loseGame(wrongMarks.map(({x, y}) => [x, y]))
+      this.lose(wrongMarks.map(({x, y}) => [x, y]))
     }
 
     this.forEachNeighbour(x, y, (x, y) => {
@@ -139,13 +144,33 @@ export class Game {
     return this.badCellCoordinates
   }
 
-  private loseGame(becauseOf: [number, number][]) {
+  private win() {
+    this.onGameEnd(true)
+  }
+
+  private hasWon() {
+    for (let x = 0; x < this.rows; x++) {
+      for (let y = 0; y < this.columns; y++) {
+        if (
+          (!this.open[x][y] && !this.marked[x][y]) ||
+          (this.marked[x][y] && this.cells[x][y] !== '*')
+        ) {
+          return false
+        }
+      }
+    }
+
+    return true
+  }
+
+  private lose(becauseOf: [number, number][]) {
     this.state = 'lost'
     this.badCellCoordinates = becauseOf
     this.open = Array.from(Array(this.rows)).map(_ =>
       Array.from(Array(this.columns)).map(_ => true)
     )
     this.emitCellStateChange(...becauseOf[0])
+    this.onGameEnd(false)
   }
 
   private placeMine(x: number, y: number): void {

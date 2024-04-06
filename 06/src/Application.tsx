@@ -57,10 +57,22 @@ function Board({rows, columns, mines}: BoardProps) {
     )
   )
   const [board] = useState(
-    new Game(rows, columns, mines, (x, y, state) => {
-      cellStates[x][y] = state
-      setCellStates(JSON.parse(JSON.stringify(cellStates)))
-    })
+    new Game(
+      rows,
+      columns,
+      mines,
+      (x, y, state) => {
+        cellStates[x][y] = state
+        setCellStates(JSON.parse(JSON.stringify(cellStates)))
+      },
+      won => {
+        if (won) {
+          alert('YAY!')
+        } else {
+          alert('Oh noes... :(')
+        }
+      }
+    )
   )
 
   return (
