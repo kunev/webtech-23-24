@@ -2,6 +2,11 @@
   syntax: '<number>';
 }
 
+@font-face {
+  font-family: mine-sweeper;
+  src: url('../assets/mine-sweeper.otf');
+}
+
 body {
   background-color: lightgrey;
 }
@@ -22,6 +27,7 @@ div#board {
 }
 
 span.cell {
+  font-family: mine-sweeper;
   user-select: none;
   width: 80px;
   height: 80px;
@@ -31,7 +37,7 @@ span.cell {
   border-right: 10px solid darkgrey;
   border-bottom: 10px solid darkgrey;
   text-align: center;
-  line-height: 100px;
+  line-height: 80px;
   font-size: 3em;
 }
 
