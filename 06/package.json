@@ -15,7 +15,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@webpack-cli/generators": "^3.0.7"
+    "@types/react": "^18.2.74",
+    "@types/react-dom": "^18.2.24",
+    "@webpack-cli/generators": "^3.0.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "css-loader": "^7.0.0",
