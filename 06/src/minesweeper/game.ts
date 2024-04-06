@@ -16,6 +16,11 @@ const cellValues = [
 
 export type CellValue = (typeof cellValues)[number]
 
+export type CellState = {
+  open: boolean
+  marked: boolean
+}
+
 export class Game {
   private cells: CellValue[][]
   private open: boolean[][]
@@ -26,7 +31,12 @@ export class Game {
   constructor(
     public readonly rows: number,
     public readonly columns: number,
-    public readonly mines: number
+    public readonly mines: number,
+    private readonly onCellStateChange: (
+      x: number,
+      y: number,
+      state: CellState
+    ) => void
   ) {
     this.cells = []
     this.open = []
@@ -62,6 +72,7 @@ export class Game {
     }
 
     this.open[x][y] = true
+    this.emitCellStateChange(x, y)
 
     if (this.cells[x][y] === '*') {
       this.loseGame([[x, y]])
@@ -85,6 +96,7 @@ export class Game {
     }
 
     this.marked[x][y] = !this.marked[x][y]
+    this.emitCellStateChange(x, y)
   }
 
   openWhenDiffused(x: number, y: number) {
@@ -133,6 +145,7 @@ export class Game {
     this.open = Array.from(Array(this.rows)).map(_ =>
       Array.from(Array(this.columns)).map(_ => true)
     )
+    this.emitCellStateChange(...becauseOf[0])
   }
 
   private placeMine(x: number, y: number): void {
@@ -180,5 +193,12 @@ export class Game {
     }
 
     return output
+  }
+
+  private emitCellStateChange(x: number, y: number) {
+    this.onCellStateChange(x, y, {
+      open: this.open[x][y],
+      marked: this.marked[x][y]
+    })
   }
 }

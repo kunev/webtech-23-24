@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import {assert} from './lib'
-import {CellValue, Game} from './minesweeper/game'
+import {CellState, CellValue, Game} from './minesweeper/game'
 
 import './style.css'
 
@@ -10,10 +10,15 @@ type BoardProps = {
   mines: number
 }
 
-function Cell({x, y, board}: {x: number; y: number; board: Game}) {
-  const [open, setOpen] = useState(false)
-  const [marked, setMarked] = useState(false)
+type CellProps = {
+  x: number
+  y: number
+  open: boolean
+  marked: boolean
+  board: Game
+}
 
+function Cell({x, y, open, marked, board}: CellProps) {
   return (
     <span
       className="cell"
@@ -25,14 +30,12 @@ function Cell({x, y, board}: {x: number; y: number; board: Game}) {
         switch (event.button) {
           case 0:
             board.openCell(x, y)
-            setOpen(true)
             break
           case 1:
             board.openWhenDiffused(x, y)
             break
           case 2:
             board.toggleMarkCell(x, y)
-            setMarked(marked => marked)
         }
       }}
     >
@@ -42,18 +45,42 @@ function Cell({x, y, board}: {x: number; y: number; board: Game}) {
 }
 
 function Board({rows, columns, mines}: BoardProps) {
-  const board = new Game(rows, columns, mines)
+  const [cellStates, setCellStates] = useState(
+    Array.from(Array(rows)).map(_ =>
+      Array.from(Array(columns)).map(
+        _ =>
+          ({
+            open: false,
+            marked: false
+          }) as CellState
+      )
+    )
+  )
+  const [board] = useState(
+    new Game(rows, columns, mines, (x, y, state) => {
+      cellStates[x][y] = state
+      setCellStates(JSON.parse(JSON.stringify(cellStates)))
+    })
+  )
 
   return (
     <div id="board">
-      {Array.from(Array(board.rows * board.columns)).map((_, position) => (
-        <Cell
-          key={position}
-          x={Math.floor(position / board.rows)}
-          y={position % board.rows}
-          board={board}
-        />
-      ))}
+      {Array.from(Array(board.rows * board.columns)).map((_, position) => {
+        const [x, y] = [
+          Math.floor(position / board.rows),
+          position % board.rows
+        ]
+        return (
+          <Cell
+            key={position}
+            x={x}
+            y={y}
+            open={cellStates[x][y].open}
+            marked={cellStates[x][y].marked}
+            board={board}
+          />
+        )
+      })}
     </div>
   )
 }
