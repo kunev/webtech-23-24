@@ -3,6 +3,7 @@ import {assert} from './lib'
 import {CellState, CellValue, Game} from './minesweeper/game'
 
 import './style.css'
+import classNames from 'classnames'
 
 type BoardProps = {
   rows: number
@@ -21,7 +22,11 @@ type CellProps = {
 function Cell({x, y, open, marked, board}: CellProps) {
   return (
     <span
-      className="cell"
+      className={classNames('cell', {
+        open,
+        [`cell-value-${board.valueAt(x, y)}`]: open,
+        marked
+      })}
       onContextMenu={e => {
         e.preventDefault()
       }}
@@ -39,7 +44,7 @@ function Cell({x, y, open, marked, board}: CellProps) {
         }
       }}
     >
-      {marked ? 'M' : open ? board.valueAt(x, y) : ''}
+      {open ? board.valueAt(x, y) : ''}
     </span>
   )
 }
@@ -104,7 +109,7 @@ export function Application() {
 
   return (
     <div id="wrapper">
-      <Board rows={12} columns={12} mines={5} />
+      <Board rows={12} columns={12} mines={10} />
     </div>
   )
 }

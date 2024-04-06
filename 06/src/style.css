@@ -2,6 +2,10 @@
   syntax: '<number>';
 }
 
+body {
+  background-color: lightgrey;
+}
+
 div#wrapper {
   display: flex;
   justify-content: center;
@@ -9,15 +13,74 @@ div#wrapper {
 
 div#board {
   display: grid;
-  grid-template-columns: repeat(var(--board-size), 40px);
+  grid-template-columns: repeat(var(--board-size), 100px);
+  border-top: 20px solid darkgrey;
+  border-left: 20px solid darkgrey;
+  border-right: 20px solid white;
+  border-bottom: 20px solid white;
   gap: 2px;
-  background-color: yellowgreen;
 }
 
 span.cell {
-  width: 40px;
-  height: 40px;
-  background-color: bisque;
+  user-select: none;
+  width: 80px;
+  height: 80px;
+  background-color: lightgray;
+  border-top: 10px solid white;
+  border-left: 10px solid white;
+  border-right: 10px solid darkgrey;
+  border-bottom: 10px solid darkgrey;
   text-align: center;
-  line-height: 40px;
+  line-height: 100px;
+  font-size: 3em;
+}
+
+span.cell.open {
+  border-top: 10px solid darkgrey;
+  border-left: 10px solid darkgrey;
+  border-right: 10px solid white;
+  border-bottom: 10px solid white;
+}
+
+span.cell:active {
+  border-top: 10px solid darkgrey;
+  border-left: 10px solid darkgrey;
+  border-right: 10px solid white;
+  border-bottom: 10px solid white;
+}
+
+span.cell.marked {
+  background-image: url(../assets/flag.png);
+  background-size: cover;
+}
+
+span.cell-value-1 {
+  color: blue;
+}
+span.cell-value-2 {
+  color: green;
+}
+span.cell-value-3 {
+  color: red;
+}
+span.cell-value-4 {
+  color: darkblue;
+}
+span.cell-value-5 {
+  color: brown;
+}
+span.cell-value-6 {
+  color: cyan;
+}
+span.cell-value-7 {
+  color: black;
+}
+span.cell-value-8 {
+  color: gray;
+}
+
+span.cell-value-* {
+  color: pink;
+  font-weight: bolder;
+  font-size: 2em;
 }
