@@ -1,20 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title></title>
     <script src="assets/index.js"></script>
-</head>
-<body>
-    <div>I'm thinking of a number. Can you guess it?</div>
+  </head>
+  <body>
+    <div>
+      <p>I'm thinking of a number.</p>
+      <p>Can you guess it?</p>
+    </div>
 
     <form action="">
-        <span>
-            <label for="guess">Guess:</label>
-            <input type="number" name="guess" id="guess">
+      <span>
+        <div>
+          <label for="guess">Guess:</label>
+          <input type="number" name="guess" id="guess" />
+        </div>
 
-            <button>Guess!</button>
-        </span>
+        <p id="message"></p>
+
+        <div><button>Guess!</button></div>
+      </span>
     </form>
-</body>
+  </body>
 </html>

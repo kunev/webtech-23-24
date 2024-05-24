@@ -8,11 +8,11 @@ const app = express()
 app.use(express.json())
 
 app.get('/', (req, res) => {
-  res.sendFile('index.html', {root: path.join(__dirname, 'public')})
+  res.sendFile('index.html', { root: path.join(__dirname, 'public') })
 })
 
 app.get('/assets/:fileName', (req, res) => {
-  res.sendFile(req.params.fileName, {root: path.join(__dirname, 'public')})
+  res.sendFile(req.params.fileName, { root: path.join(__dirname, 'public') })
 })
 
 app.post('/guess', (req, res) => {
@@ -22,10 +22,14 @@ app.post('/guess', (req, res) => {
 
   if (guess === number) {
     number = Math.floor(Math.random() * 100)
-    console.log(number)
-    res.json({correct: true})
+    res.json({ correct: true })
   } else {
-    res.json({correct: false})
+    let hint = ''
+
+    if (guess < number) hint = 'higher'
+    else hint = 'lower'
+    
+    res.json({ correct: false, hint: hint })
   }
 })
 
